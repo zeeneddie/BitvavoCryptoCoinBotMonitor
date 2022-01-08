@@ -17,5 +17,6 @@ def animate(i):
 	ax1.clear()
 	ax1.plot(x, score)
 
+
 ani = animation.FuncAnimation(fig, animate, interval=100)
 plt.show()
