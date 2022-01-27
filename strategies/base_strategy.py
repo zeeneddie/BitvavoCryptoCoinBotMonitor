@@ -89,12 +89,11 @@ class BaseStrategy:
     def __update(self, candle):
         """Run updates on all markets/indicators/signal generators running in strategy"""
         def update(candle):
-            print("Updating strategy")
-            self.print_message("Received new candle")
+            logger.info("Received new candle")
             self.market.update(self.interval, candle)
             self.__update_positions()
             self.on_data(candle)
-            self.print_message("Simulation BTC balance: " + str(self.market.get_wallet_balance()))
+            logger.info("Simulation balance: " + str(self.market.get_wallet_balance()))
         self.__jobs.put(lambda: update(candle))
 
     def on_data(self, candle):
@@ -104,7 +103,7 @@ class BaseStrategy:
     def get_open_position_count(self):
         """Check how many positions this strategy has open"""
         count = len([p for p in self.positions if p.is_open])
-        self.print_message(str(count) + " long positions open")
+        logger.info(str(count) + " long positions open")
         return count
 
     def __update_positions(self):
@@ -117,7 +116,9 @@ class BaseStrategy:
         """Open long position"""
         if self.is_simulated:
             """Open simulated long position"""
-            self.print_message("Going long on " + self.market.analysis_pair)
+            logger.warning("Going long on " + self.market.analysis_pair)
+            logger.info("Simulation balance: " + str(self.market.get_wallet_balance()))
+
             self.positions.append(market_simulator.open_long_position_simulation(self.market, order_quantity,
                                                                                  self.market.latest_candle[
                                                                                      self.interval][3],
@@ -126,7 +127,7 @@ class BaseStrategy:
                                                                                  profit_target_percent))
         else:
             """LIVE long position"""
-            self.print_message("Going long on " + self.market.analysis_pair)
+            logger.info("Going long on " + self.market.analysis_pair)
             self.positions.append(position.open_long_position(self.market, order_quantity,
                                                           self.market.get_best_ask(),
                                                           fixed_stoploss_percent,
@@ -135,7 +136,7 @@ class BaseStrategy:
 
     def __run(self):
         """Start the strategy thread waiting for commands"""
-        self.print_message("Starting strategy " + str(self.strategy_id))
+        logger.warning("Starting strategy: " + str(self.strategy_id))
         self.running = True
         while self.running:
             if not self.__jobs.empty():
@@ -149,7 +150,7 @@ class BaseStrategy:
 
     def print_message(self, msg):
         """Add to a queue of messages that can be consumed by the UI"""
-        print(str("Strategy " + str(self.strategy_id) + ": " + msg))
+        logger.info(str("Strategy " + str(self.strategy_id) + ": " + msg))
         logger.info(msg)
         self.ui_messages.put(msg)
 

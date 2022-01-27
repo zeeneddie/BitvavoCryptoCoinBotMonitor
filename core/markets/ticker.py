@@ -25,13 +25,12 @@ def start_ticker(interval):
 
 
 def __start_ticker(interval):
-    """Start a ticker own its own thread, will use pypubsub to send a message each time interval"""
-    logger.info(interval + " ticker running...")
+    """Start a ticker on its own thread, will use pypubsub to send a message each time interval"""
+    logger.warning(interval + " ticker running...")
     live_tick_count = 0
     while True:
         """Running this 'ticker' from the main loop to trigger listeners to pull candles every 5 minutes"""
-        logger.info("Live Tick: {}".format(str(live_tick_count)))
-        print(interval + " tick")
+        logger.warning("Live Tick: {}".format(str(live_tick_count)))
         pub.sendMessage("tick" + interval)
         live_tick_count += 1
         time.sleep(__convert_interval_to_int(interval))

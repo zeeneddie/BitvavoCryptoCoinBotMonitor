@@ -104,7 +104,7 @@ class LongPositionSimulator(position.LongPosition):
 
     def liquidate_position(self):
         """Will use this method to actually create the order that liquidates the position"""
-        logger.info("Closing simulated long position")
+        logger.warning("Closing simulated long position")
         open_short_position_simulation(self.market, self.amount, self.market.latest_candle['5m'][3])
         self.is_open = False
 

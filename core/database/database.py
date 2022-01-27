@@ -62,6 +62,7 @@ def drop_tables():
 
 
 def create_tables():
+    print('Creating tables...')
     metadata.create_all(engine)
 
 
@@ -69,3 +70,7 @@ def reset_db():
     print('Resetting database...')
     drop_tables()
     create_tables()
+
+
+if __name__ == '__main__':
+    reset_db()

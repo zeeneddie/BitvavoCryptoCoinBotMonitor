@@ -80,15 +80,14 @@ class MarketWatcher:
             for entry in data:
                 if not latest_db_candle[10] >= entry[0]:
                     ohlcv_functions.insert_data_into_ohlcv_table(self.exchange.id, self.analysis_pair, self.interval, entry, self.PairID)
-                    print('Writing missing candle ' + str(entry[0]) + ' to database')
+                    logger.warning('Writing missing candle ' + str(entry[0]) + ' to database')
         self.historical_synced = True
         pub.sendMessage(self.topic + "historical")
         logger.info('Market data has been synced.')
 
     def __pull_latest_candle(self, interval):
         """Initiate a pull of the latest candle, making sure not to pull a duplicate candle"""
-        logger.info("Getting latest candle for " + self.exchange.id + " " + self.analysis_pair + " " + interval)
-        print("Getting latest candle")
+        logger.warning("Getting latest candle for " + self.exchange.id + " " + self.analysis_pair + " " + interval)
         try:
             latest_data = self.exchange.fetch_ohlcv(self.analysis_pair, interval)[-1]
             while latest_data == self.latest_candle:

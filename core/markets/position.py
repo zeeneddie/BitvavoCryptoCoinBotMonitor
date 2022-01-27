@@ -19,6 +19,7 @@ class Position:
 
 class LongPosition(Position):
     """This class will handle a position's orders, stop losses, and exit/entry"""
+
     def __init__(self, market, amount, price, fixed_stoploss_percent, trailing_stoploss_percent, profit_target_percent):
         super().__init__(market, amount, price)
         self.is_open = False
@@ -31,11 +32,12 @@ class LongPosition(Position):
 
     def open(self):
         """Use the market to place the order"""
+        logger.warning("Open position: amount: " + str(self.amount) + " price: " + str(self.price))
         self.initial_order = self.market.limit_buy(self.amount, self.price)
         self.is_open = True
 
     def update(self):
-        """Use this method to trigger position to check if profit target has been met, and re-set trailiing stop loss"""
+        """Use this method to trigger position to check if profit target has been met, and re-set trailing stop loss"""
         if not self.is_open:
             pass
         elif self.market.get_best_bid() < self.trailing_stoploss or \
@@ -65,13 +67,14 @@ class LongPosition(Position):
 
     def liquidate_position(self):
         """Will use this method to actually create the order that liquidates the position"""
-        logger.info("Liquidating long position of " + self.amount + " | " + self.market.analysis_pair)
+        logger.warning("Liquidating position of " + self.amount + " | " + self.market.analysis_pair)
         self.market.limit_sell(self.amount, self.market.get_best_bid())
         self.is_open = False
 
 
 class ShortPosition(Position):
     """Short position is basically just to close out the order successfully ie liquidate_position"""
+
     def __init__(self, market, amount, price):
         super().__init__(market, amount, price)
         self.initial_order = None
@@ -84,7 +87,8 @@ class ShortPosition(Position):
 
 
 def open_long_position(market, amount, price, fixed_stoploss_percent, trailing_stoploss_percent, profit_target_percent):
-    position = LongPosition(market, amount, price, fixed_stoploss_percent, trailing_stoploss_percent, profit_target_percent)
+    position = LongPosition(market, amount, price, fixed_stoploss_percent, trailing_stoploss_percent,
+                            profit_target_percent)
     position.open()
     return position
 
@@ -101,5 +105,3 @@ def calculate_transaction_fee(exchange, pair):
 
 def calculate_drawdown():
     pass
-
-

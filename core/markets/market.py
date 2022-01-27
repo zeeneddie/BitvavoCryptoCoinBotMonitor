@@ -94,6 +94,12 @@ class Market:
         orderbook = self.exchange.fetch_order_book(self.analysis_pair)
         return orderbook['asks'][0][0] if len(orderbook['asks']) > 0 else None
 
+    def get_spread(self):
+        ask = self.get_best_ask()
+        bid = self.get_best_bid()
+        spread = round(((ask - bid) / ask) * 100, 2)
+        return spread
+
     def get_historical_candles(self, interval, candle_limit=None):
         if len(self.candles[interval]) == 0:
             self.candles[interval] = market_watcher.get_market_watcher(self.exchange.id, self.base_currency, self.quote_currency, interval).get_historical_candles()
@@ -101,3 +107,12 @@ class Market:
             return self.candles[interval]
         else:
             return self.candles[interval][-candle_limit:]
+
+if __name__ == '__main__':
+    market = Market('bitvavo', 'ADA', 'EUR', 'base_strategy')
+    bid = market.get_best_bid()
+    print(bid)
+    ask = market.get_best_ask()
+    print(ask)
+    spread = market.get_spread()
+    print(spread)
