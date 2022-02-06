@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from core.database import ohlcv_functions
 import pandas as pd
-from core.markets import market
+from core.markets import coin
 
 # Library to explore visualization of API data. Critical to ensure data integrity as well as confirm strategy indicators are calculated correctly .
 

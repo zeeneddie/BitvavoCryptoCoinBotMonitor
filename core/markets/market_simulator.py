@@ -1,4 +1,4 @@
-from core.markets.market import Market
+from core.markets.coin import Coin
 from core.database import ohlcv_functions
 from core.markets import position
 from core.markets import order
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 long_positions = 0
 
 
-class MarketSimulator(Market):
+class MarketSimulator(Coin):
     """Wrapper for market that allows simulating simple buys and sells"""
     def __init__(self, exchange, base_currency, quote_currency, quote_currency_balance, strategy):
         super().__init__(exchange, base_currency, quote_currency, strategy)
@@ -83,7 +83,7 @@ class MarketSimulator(Market):
 
 def open_long_position_simulation(market, amount, price, fixed_stoploss, trailing_stoploss_percent, profit_target_percent):
     """Create simulated long position"""
-    logger.info("Opening simulated long position")
+    logger.warning("Opening simulated long position")
     position = LongPositionSimulator(market, amount, price, fixed_stoploss, trailing_stoploss_percent, profit_target_percent)
     position.open()
     return position
@@ -91,7 +91,7 @@ def open_long_position_simulation(market, amount, price, fixed_stoploss, trailin
 
 def open_short_position_simulation(market, amount, price):
     """Create simulated short position"""
-    logger.info("Opening simulated short position")
+    logger.warning("Opening simulated short position")
     position = ShortPositionSimulator(market, amount, price)
     position.open()
     return position
@@ -104,8 +104,9 @@ class LongPositionSimulator(position.LongPosition):
 
     def liquidate_position(self):
         """Will use this method to actually create the order that liquidates the position"""
-        logger.warning("Closing simulated long position")
+        logger.warning("Closing simulated long position: Price: " + str(self.market.latest_candle['5m'][3]) + " Wallet: " + str(self.market.get_wallet_balance()))
         open_short_position_simulation(self.market, self.amount, self.market.latest_candle['5m'][3])
+        logger.warning("Closing simulated long position after order" + str(self.market.get_wallet_balance()))
         self.is_open = False
 
     def open(self):
@@ -114,7 +115,7 @@ class LongPositionSimulator(position.LongPosition):
 
     def update(self):
         """Use this method to trigger position to check if profit target has been met, and re-set trailiing stop loss"""
-        logger.info("UPDATING LONG POSITION")
+        logger.warning("UPDATING LONG POSITION: " + "Price: " + str(self.market.latest_candle['5m'][3]) + " Trailing SL: " + str(self.trailing_stoploss) + " Fixed: " + str(self.fixed_stoploss) + " Profit Target: " + str(self.profit_target))
         if self.market.latest_candle['5m'][3] < self.trailing_stoploss or\
             self.market.latest_candle['5m'][3] < self.fixed_stoploss or\
             self.market.latest_candle['5m'][3] >= self.profit_target:  # check price against last calculated trailing stoploss

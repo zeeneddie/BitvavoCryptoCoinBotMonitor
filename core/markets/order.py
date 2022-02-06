@@ -20,7 +20,7 @@ class Order:
         self.amount = amount
         self.price = price
         self.__order_receipt = None
-        logger.info("Opening " + side + " order of " + amount + " " + self.market.base_currency)
+        logger.warning("Opening " + side + " order of " + amount + " " + self.market.base_currency)
         self.execute()
 
     def execute(self):
@@ -60,11 +60,11 @@ class Order:
         return self.market.exchange.fetch_order(self.get_id())['remaining']
 
 
-def write_order_to_db(exchange, pair, position, amount, price, simulated):
+def write_order_to_db(pair, side, amount, price):
     with database.lock:
-        ins = database.TradingOrders.insert().values(Timestamp=get_timestamp(), Exchange=exchange, Pair=pair, Position=position, Amount=amount, Price=price, Simulated=simulated)
+        ins = database.TradingOrders.insert().values(Timestamp=get_timestamp(), Pair=pair, Position=side, Amount=amount, Price=price)
         conn.execute(ins)
-        logger.info("Wrote open order to DB...")
+        logger.info("Wrote order to DB...")
 
 
 def get_timestamp():

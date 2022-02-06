@@ -1,8 +1,8 @@
 from threading import Thread
 from pubsub import pub
-from core.markets import market
-from core.markets import market_watcher
-from strategies import base_strategy
+# from core.markets import market
+# from core.markets import market_watcher
+# from strategies import base_strategy
 import time
 import logging
 
@@ -26,10 +26,10 @@ def start_ticker(interval):
 
 def __start_ticker(interval):
     """Start a ticker on its own thread, will use pypubsub to send a message each time interval"""
-    logger.warning(interval + " ticker running...")
+    logger.info(interval + " ticker running...")
     live_tick_count = 0
     while True:
-        """Running this 'ticker' from the main loop to trigger listeners to pull candles every 5 minutes"""
+        """Running this 'ticker' from the main loop to trigger listeners to pull candles every <INTERVAL>"""
         logger.warning("Live Tick: {}".format(str(live_tick_count)))
         pub.sendMessage("tick" + interval)
         live_tick_count += 1

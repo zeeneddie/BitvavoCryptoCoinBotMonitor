@@ -1,6 +1,6 @@
 from core.markets import market_watcher
 from core.markets import market_simulator
-from core.markets import market
+from core.markets import coin
 from core.markets import position
 from threading import Thread
 from queue import Queue
@@ -41,20 +41,24 @@ class BaseStrategy:
         if self.is_simulated:
             self.market = market_simulator.MarketSimulator(exchange, base_currency, quote_currency, simulated_quote_balance, self)
         else:
-            self.market = market.Market(exchange, base_currency, quote_currency, self)
+            self.market = market.Coin(exchange, base_currency, quote_currency, self)
         strategies.append(self)
         self.strategy_id = len(strategies)
         self.ui_messages = Queue()
 
     def start(self):
         """Start thread and subscribe to candle updates"""
-        self.__jobs.put(lambda: market_watcher.subscribe(self.market.exchange.id, self.market.base_currency, self.market.quote_currency, self.interval, self.__update))
-        self.__thread.start()
+        # self.__jobs.put(lambda: market_watcher.subscribe(self.market.exchange.id, self.market.base_currency, self.market.quote_currency, self.interval, self.__update))
+        # self.__thread.start()
+        logger.warning("BaseStrategy - Start")
+        #market_watcher.subscribe(self.market.exchange.id, self.market.base_currency, self.market.quote_currency, self.interval, self.__update)
 
-    def warmup(self):
-        """Queue warmup when market data has been synced"""
-        market_watcher.subscribe_historical(self.market.exchange.id, self.market.base_currency,
-                                            self.market.quote_currency, self.interval, self.__warmup)
+
+    # def warmup(self):
+    #     """Queue warmup when market data has been synced"""
+    #     logger.warning("WARMUP started")
+    #     market_watcher.subscribe_historical(self.market.exchange.id, self.market.base_currency,
+    #                                         self.market.quote_currency, self.interval, self.__warmup)
 
     def run_simulation(self):
         """Queue simulation when market data has been synced"""
@@ -62,17 +66,17 @@ class BaseStrategy:
             market_watcher.subscribe_historical(self.market.exchange.id, self.market.base_currency,
                                             self.market.quote_currency, self.interval, self.__run_simulation)
 
-    def __warmup(self, periods=None):
-        """Update TA indicators on specified number of historical periods"""
-        def warmup(periods):
-            self.print_message("Warming up strategy")
-            if periods is None:
-                historical_data = self.market.get_historical_candles(self.interval)
-            else:
-                historical_data = self.market.get_historical_candles(self.interval, periods)
-            for candle in historical_data:
-                self.market.update(self.interval, candle)
-        self.__jobs.put(warmup(periods))
+    # def __warmup(self, periods=None):
+    #     """Update TA indicators on specified number of historical periods"""
+    #     def warmup(periods):
+    #         self.print_message("Warming up strategy")
+    #         if periods is None:
+    #             historical_data = self.market.get_historical_candles(self.interval)
+    #         else:
+    #             historical_data = self.market.get_historical_candles(self.interval, periods)
+    #         for candle in historical_data:
+    #             self.market.update(self.interval, candle)
+    #     self.__jobs.put(warmup(periods))
 
     def __run_simulation(self, candle_set=None):
         """Start a simulation on historical candles (runs update method on historical candles)"""
@@ -88,13 +92,16 @@ class BaseStrategy:
 
     def __update(self, candle):
         """Run updates on all markets/indicators/signal generators running in strategy"""
+        logger.warning("BaseStrategy - __update")
         def update(candle):
             logger.info("Received new candle")
             self.market.update(self.interval, candle)
             self.__update_positions()
             self.on_data(candle)
             logger.info("Simulation balance: " + str(self.market.get_wallet_balance()))
-        self.__jobs.put(lambda: update(candle))
+        #self.__jobs.put(lambda: update(candle))
+        logger.warning("__update")
+        update(candle)
 
     def on_data(self, candle):
         """Will be called on each candle, this method is to be overriden by inheriting classes"""
@@ -116,23 +123,25 @@ class BaseStrategy:
         """Open long position"""
         if self.is_simulated:
             """Open simulated long position"""
-            logger.warning("Going long on " + self.market.analysis_pair)
-            logger.info("Simulation balance: " + str(self.market.get_wallet_balance()))
-
+            logger.warning("Going long on " + self.market.analysis_pair + " quantity: " + str(order_quantity))
+            logger.warning("Simulation balance: " + str(self.market.get_wallet_balance()))
             self.positions.append(market_simulator.open_long_position_simulation(self.market, order_quantity,
                                                                                  self.market.latest_candle[
                                                                                      self.interval][3],
                                                                                  fixed_stoploss_percent,
                                                                                  trailing_stoploss_percent,
                                                                                  profit_target_percent))
+            logger.warning("Simulation balance after order: " + str(self.market.get_wallet_balance()))
         else:
             """LIVE long position"""
-            logger.info("Going long on " + self.market.analysis_pair)
+            logger.warning("Going long on " + self.market.analysis_pair + " quantity: " + str(order_quantity))
+            logger.warning("Balance: " + str(self.market.get_wallet_balance()))
             self.positions.append(position.open_long_position(self.market, order_quantity,
                                                           self.market.get_best_ask(),
                                                           fixed_stoploss_percent,
                                                           trailing_stoploss_percent,
                                                           profit_target_percent))
+            logger.warning("Simulation balance after order: " + str(self.market.get_wallet_balance()))
 
     def __run(self):
         """Start the strategy thread waiting for commands"""
@@ -142,6 +151,7 @@ class BaseStrategy:
             if not self.__jobs.empty():
                 job = self.__jobs.get()
                 try:
+                    logging.info("base_strategy - __run -- job: " + str(job))
                     job()
                 except Exception as e:
                     print(e)
