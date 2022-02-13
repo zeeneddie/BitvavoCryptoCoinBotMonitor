@@ -7,8 +7,8 @@ from core.database import database
 
 logger = logging.getLogger(__name__)
 
-engine = database.engine
-conn = engine.connect()
+# engine = database.engine
+# conn = engine.connect()
 
 
 class Order:
