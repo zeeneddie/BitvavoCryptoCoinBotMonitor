@@ -40,7 +40,7 @@ class Coin:
         #self.var['amountQuote'] = str(self.amount)
         # 'amountQuote' in sell = EURO - amount = crypto currency amount
         # 'amount' in buy = EURO
-        self.var_sell['amount'] = str(self.amount)
+        self.var_sell['amountQuote'] = str(self.amount)
         self.var_buy['amountQuote'] = str(self.amount)
         self.gain = self.coin_position[5]
         self.trail = self.coin_position[6]

@@ -79,7 +79,7 @@ class Database():
         #ins2 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='BTC-EUR', Position='Y',
         #                                      Amount=0.000001, Price=35145, Gain=0.01, Trail=0.005, StopLoss=0.10)
         self.conn.execute(ins2)
-        ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='Y', Amount=9.5,
+        ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='Y', Amount=10,
                                          Price=2593, Gain=0.03, Trail=0.01, StopLoss=0.10)
         #ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='N',
         #                                      Amount=0.000001,
@@ -148,10 +148,12 @@ class Database():
 
 if __name__ == '__main__':
     db = Database()
-    db.update_position( "ADA-EUR", "N", 0.964)
-    # b = db.get_orders()
-    # print(b)
-    # db.reset_db()
-    # db.insert_positions_to_db()
-    # db.get_all_positions()
-    # print(db.get_coin_positions("WIN-EUR"))
+    #db.update_position( "ADA-EUR", "N", 0.964)
+    #b = db.get_orders()
+    #print(b)
+    #db.reset_db()
+    db.drop_tables()
+    db.create_tables()
+    db.insert_positions_to_db()
+    db.get_all_positions()
+    print(db.get_coin_positions("WIN-EUR"))
