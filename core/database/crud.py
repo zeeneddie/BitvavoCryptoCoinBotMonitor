@@ -1,6 +1,8 @@
 from sqlalchemy import MetaData, Table, Column, String, Integer, Text, DateTime, Boolean, create_engine, select, insert, \
     update, delete
 from threading import Lock
+import sqlite3
+
 
 import os
 
@@ -11,13 +13,9 @@ class Database():
         self.db_fullpath = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             self.db_name)
-        self.lock = Lock()
-        self.engine = create_engine(
-            'sqlite:///{}'.format(self.db_fullpath),
-            connect_args={'check_same_thread': False},
-            echo=False)
+        self.cnt = sqlite3.connect(self.db_fullpath)
+
         self.metadata = MetaData()
-        self.conn = self.engine.connect()
 
 
         self.employees = Table('Employee', self.metadata,
@@ -35,17 +33,17 @@ class Database():
                 print(f"{c} ({c.type})")
 
 
-    def do_insert(self):
+    def do_insert(self, First, Last, BD):
         stmt = insert(self.employees).values(
-            LastName='Collins',
-            FirstName='Arnold',
-            BirthDate='2000-01-31')
+            LastName=Last,
+            FirstName=First,
+            BirthDate=BD)
         new_id = 0
 
-        with self.engine.begin() as con:
-            result = con.execute(stmt)
-            new_id = result.inserted_primary_key['Id']
-            print(f"New Id: {new_id}")
+        result = self.cnt.execute(str(stmt))
+
+        new_id = result.inserted_primary_key[-1]
+        print(f"New Id: {new_id}")
 
         return new_id
 
@@ -87,14 +85,20 @@ if __name__ == '__main__':
     db = Database()
     print("---- show_metadata() ----")
     db.show_metadata()
+    # create a database named backup
+    cursor = db.cnt.execute('''SELECT * FROM Employee ;''')
+
+    # print data using the cursor object
+    for i in cursor:
+        print(i)
     print("---- do_insert() ----")
-    id = db.do_insert()
-    print("---- select_by_id() ----")
-    db.select_by_id(id)
-    print("---- do_update() ----")
-    db.do_update(id)
-    db.select_by_id(id)
-    print("---- do_delete() ----")
-    db.do_delete(id)
-    db.select_by_id(id)
+    id = db.do_insert("Eddie", "Zeen", "13-10-1966")
+    # print("---- select_by_id() ----")
+    # db.select_by_id(id)
+    # print("---- do_update() ----")
+    # db.do_update(id)
+    # db.select_by_id(id)
+    # print("---- do_delete() ----")
+    # db.do_delete(id)
+    # db.select_by_id(id)
     print("---- end ----")

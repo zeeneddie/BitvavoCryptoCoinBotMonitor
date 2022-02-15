@@ -55,6 +55,13 @@ class Database():
                                Column('StopLoss', Float)
                                )
 
+        self.employees = Table('Employee', self.metadata,
+                               Column('Id', Integer(), primary_key=True),
+                               Column('LastName', String(8000)),
+                               Column('FirstName', String(8000)),
+                               Column('BirthDate', String(8000))
+                               )
+
     def drop_tables(self):
         print('Dropping tables...')
         self.metadata.drop_all(self.engine)
@@ -79,22 +86,22 @@ class Database():
         #ins2 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='BTC-EUR', Position='Y',
         #                                      Amount=0.000001, Price=35145, Gain=0.01, Trail=0.005, StopLoss=0.10)
         self.conn.execute(ins2)
-        ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='Y', Amount=10,
-                                         Price=2593, Gain=0.03, Trail=0.01, StopLoss=0.10)
+        ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='N', Amount=10,
+                                         Price=2731, Gain=0.03, Trail=0.01, StopLoss=0.10)
         #ins3 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='ETH-EUR', Position='N',
         #                                      Amount=0.000001,
         #                                      Price=2580, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins3)
-        ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='Y', Amount=10,
-                                         Price=0.000288, Gain=0.03, Trail=0.01, StopLoss=0.10)
+        ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='N', Amount=10,
+                                         Price=0.00029569, Gain=0.03, Trail=0.01, StopLoss=0.10)
         #ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='N', Amount=35000,
         #                                     Price=0.0003150, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins4)
         ins5 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='HOT-EUR', Position='Y', Amount=10,
                                               Price=0.00443, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins5)
-        ins6 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='DENT-EUR', Position='Y', Amount=10,
-                                              Price=0.0026, Gain=0.03, Trail=0.01, StopLoss=0.10)
+        ins6 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='DENT-EUR', Position='N', Amount=10,
+                                              Price=0.0026984, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins6)
         logger.info("Wrote open order to DB...")
 

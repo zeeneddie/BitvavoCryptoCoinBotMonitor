@@ -15,3 +15,14 @@ class Bitvavo_client():
           # 'ACCESSWINDOW': 10000,
           # 'DEBUGGING': False
         })
+
+
+if __name__ == "__main__":
+    bitvavo = Bitvavo_client()
+    response = bitvavo.bitvavo.book('BTC-EUR', {'depth':'1'})
+    for item in response['bids']:
+        print('Bids', item)
+    for item in response['asks']:
+        print('Asks', item)
+    result = bitvavo.bitvavo.placeOrder("BTC-EUR", 'sell', 'market', {'amountQuote':'2'})
+    print(result)
