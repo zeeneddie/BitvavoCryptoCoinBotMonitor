@@ -1,22 +1,31 @@
 import csv
+import os
 
 
-class file():
-    def __init(self):
-        self.rows = []
-
+class File():
     def read(self):
-        with open("coin_info.csv", 'r') as file:
+        self.file_name = 'coin_info.csv'
+        self.file_fullpath = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            self.file_name)
+        self.rows = []
+        with open(self.file_fullpath, 'r') as file:
             csvreader = csv.reader(file)
 
             for row in csvreader:
                 self.rows.append(row)
-        print(self.rows)
+        return (self.rows)
 
-    def write(self):
+    def write(self, rows):
         filename = 'coin_info.csv'
         with open(filename, 'w') as file:
-            for row in self.rows:
+            for row in rows:
                 for x in row:
                     file.write(str(x) + ', ')
-                file.write('n')
+                file.write('\n')
+
+
+if __name__ == "__main__":
+    f = File()
+    r = f.read()
+    f.write(r)

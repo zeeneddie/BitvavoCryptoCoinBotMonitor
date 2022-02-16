@@ -5,8 +5,8 @@ from tkinter import *
 
 class Bitvavo_client():
     def __init__(self):
-        APIKEY=os.environ.get('APIKET')
-        APISECRET = os.environ.get('SECKET')
+        APIKEY=os.environ.get('BITVAVOAPIKEY')
+        APISECRET = os.environ.get('BITVAVOSECKEY')
         self.bitvavo = Bitvavo({
           'APIKEY': APIKEY,
           'APISECRET': APISECRET#,

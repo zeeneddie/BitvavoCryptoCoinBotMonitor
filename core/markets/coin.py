@@ -17,9 +17,11 @@ class Coin:
     This includes functionality to contain and update TA indicators as well as the latest OHLCV data
     This also handles the API key for authentication, as well as methods to place orders"""
 
-    def __init__(self, db, bitvavo_client, base_currency, quote_currency):
-        self.base_currency = base_currency
-        self.quote_currency = quote_currency
+    def __init__(self, bitvavo_client, coin_info):
+        self.base_currency = coin_info[0] #base_currency
+        self.quote_currency = coin_info[1] #quote_currency
+        self.base_currency = self.base_currency.strip()
+        self.quote_currency = self.quote_currency.strip()
         self.analysis_pair = '{}-{}'.format(self.base_currency, self.quote_currency)
         self.signals = []
         # temp = pd.DataFrame(exchange.fetch_ohlcv(self.analysis_pair, '5m'))
@@ -30,11 +32,11 @@ class Coin:
         self.indicators = defaultdict(list)
         self.candles = defaultdict(list)
         self.latest_candle = defaultdict(list)  # allows for order simulations based on historical ohlcv data
-        self.coin_position = db.get_coin_positions(self.analysis_pair)
+        #self.coin_position = db.get_coin_positions(self.analysis_pair)
         self.low = 9999999.0
         self.high = 0.0
-        self.current_price = self.coin_position[4]
-        self.amount = self.coin_position[3]
+        self.current_price = float(coin_info[4])
+        self.amount = float(coin_info[3])
         self.var_sell = dict()
         self.var_buy = dict()
         #self.var['amountQuote'] = str(self.amount)
@@ -42,9 +44,9 @@ class Coin:
         # 'amount' in buy = EURO
         self.var_sell['amountQuote'] = str(self.amount)
         self.var_buy['amountQuote'] = str(self.amount)
-        self.gain = self.coin_position[5]
-        self.trail = self.coin_position[6]
-        self.stoploss= self.coin_position[7]
+        self.gain = float(coin_info[5])
+        self.trail = float(coin_info[6])
+        self.stoploss= float(coin_info[7])
         self.buy_drempel = 0.0
         self.sell_drempel = 0.0
         self.buy_signal = False
@@ -53,7 +55,8 @@ class Coin:
         self.stop_loss_sell = 0
         self.trail_stop_buy_drempel = 0.0
         self.trail_stop_sell_drempel = 0.0
-        if self.coin_position[2] == 'Y':
+        coin_positie = coin_info[2].strip()
+        if coin_positie == 'Y':
             self.position = True
         else:
             self.position = False
