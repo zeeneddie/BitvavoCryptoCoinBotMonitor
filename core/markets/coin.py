@@ -109,9 +109,9 @@ class Coin:
                     print(get_timestamp())
                     result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
                     print(result)
-                    print(f"PLACEORDER Price: {self.current_price}, bitvavo.placeOrder({self.analysis_pair}, "
-                          f"'sell', 'market', {'amount': {str(self.var_sell)}} "
-                          f", Price: {bid} = {round((self.sell_drempel/self.current_price)*100, 2)})")
+                    #print(f"PLACEORDER Price: {self.current_price}, bitvavo.placeOrder({self.analysis_pair}, "
+                    # #     f"'sell', 'market', {'amount': {str(self.var_sell)}} "
+                    #      f", Price: {bid} = {round((self.sell_drempel/self.current_price)*100, 2)})")
                     #order.create_market_sell_order(self.analysis_pair, self.amount)
                     db.write_order(self.analysis_pair, 'bid', self.amount, bid)
                     #db.update_position(self, result)

@@ -92,13 +92,13 @@ class Database():
         #                                      Amount=0.000001,
         #                                      Price=2580, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins3)
-        ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='N', Amount=10,
-                                         Price=0.00029569, Gain=0.03, Trail=0.01, StopLoss=0.10)
+        ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='Y', Amount=10,
+                                         Price=0.00028749, Gain=0.03, Trail=0.01, StopLoss=0.10)
         #ins4 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='WIN-EUR', Position='N', Amount=35000,
         #                                     Price=0.0003150, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins4)
-        ins5 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='HOT-EUR', Position='Y', Amount=10,
-                                              Price=0.00443, Gain=0.03, Trail=0.01, StopLoss=0.10)
+        ins5 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='HOT-EUR', Position='N', Amount=10,
+                                              Price=0.0045202, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins5)
         ins6 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='DENT-EUR', Position='N', Amount=10,
                                               Price=0.0026984, Gain=0.03, Trail=0.01, StopLoss=0.10)
