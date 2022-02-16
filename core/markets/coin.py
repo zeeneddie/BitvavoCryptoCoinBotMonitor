@@ -113,7 +113,7 @@ class Coin:
                     # #     f"'sell', 'market', {'amount': {str(self.var_sell)}} "
                     #      f", Price: {bid} = {round((self.sell_drempel/self.current_price)*100, 2)})")
                     #order.create_market_sell_order(self.analysis_pair, self.amount)
-                    db.write_order(self.analysis_pair, 'bid', self.amount, bid)
+                    #db.write_order(self.analysis_pair, 'bid', self.amount, bid)
                     #db.update_position(self, result)
                     self.sell_signal = False
                     self.position = False
@@ -155,8 +155,8 @@ class Coin:
                     print(get_timestamp())
                     r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     print(r)
-                    print(f" BUY: PLACEORDER({self.analysis_pair}, {self.var_buy}, Price: {self.current_price})")
-                    db.write_order(self.analysis_pair, 'ask', self.amount, self.current_price)
+                    #print(f" BUY: PLACEORDER({self.analysis_pair}, {self.var_buy}, Price: {self.current_price})")
+                    #db.write_order(self.analysis_pair, 'ask', self.amount, self.current_price)
 
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
             if ask > self.stop_loss_sell:
