@@ -55,13 +55,6 @@ class Database():
                                Column('StopLoss', Float)
                                )
 
-        self.employees = Table('Employee', self.metadata,
-                               Column('Id', Integer(), primary_key=True),
-                               Column('LastName', String(8000)),
-                               Column('FirstName', String(8000)),
-                               Column('BirthDate', String(8000))
-                               )
-
     def drop_tables(self):
         print('Dropping tables...')
         self.metadata.drop_all(self.engine)
@@ -98,7 +91,7 @@ class Database():
         #                                     Price=0.0003150, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins4)
         ins5 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='HOT-EUR', Position='N', Amount=10,
-                                              Price=0.0045202, Gain=0.03, Trail=0.01, StopLoss=0.10)
+                                              Price=0.004502, Gain=0.03, Trail=0.01, StopLoss=0.10)
         self.conn.execute(ins5)
         ins6 = self.Positions.insert().values(Timestamp=self.get_timestamp(), Pair='DENT-EUR', Position='Y', Amount=10,
                                               Price=0.0026984, Gain=0.03, Trail=0.01, StopLoss=0.10)

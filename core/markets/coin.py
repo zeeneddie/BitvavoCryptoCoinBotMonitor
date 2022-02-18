@@ -95,9 +95,10 @@ class Coin:
         spread = round(((ask - bid) / ask) * 100, 2)
         return spread
 
+    def get_position(self):
+        return self.position
 
-
-    def check_action(self, db):
+    def check_action(self):
         if self.position:               # we are going to sell
             if self.test:
                 bid = float(self.get_next_test())

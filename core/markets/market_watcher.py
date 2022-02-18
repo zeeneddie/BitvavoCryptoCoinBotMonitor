@@ -21,57 +21,46 @@ class MarketWatcher:
      Strategies that subscribe to the ticker will be given the new candles"""
     def __init__(self, exchange, base_currency, quote_currency, interval):
         exchange = getattr(ccxt, exchange)
-        # ticker.subscribe(self.tick, interval)
+        ticker.subscribe(self.tick, interval)
         self.analysis_pair = '{}/{}'.format(base_currency, quote_currency)
         self.exchange = exchange()
         self.interval = interval
         self.base_currency = base_currency
         self.quote_currency = quote_currency
         self.topic = self.exchange.id + self.analysis_pair + self.interval
-        # self.__thread = Thread(target=self.__run)  # create thread for listener
-        # self._jobs = Queue()  # create job queue
+        self.__thread = Thread(target=self.__run)  # create thread for listener
+        self._jobs = Queue()  # create job queue
         self.__running = False
         self.historical_synced = False
         self.latest_candle = None
         self.PairID = ohlcv_functions.write_trade_pairs_to_db(self.exchange.id, self.base_currency, self.quote_currency, self.interval)
-        # self.__thread.start()
+        self.__thread.start()
 
     def __run(self):
         """Start listener queue waiting for ticks"""
         self.__running = True
         self.sync_historical()
-        counter = 0
         while self.__running:
-            time.sleep(1)
-            if counter >= 300:
-                self.__pull_latest_candle(self.interval)
-                counter = 0
-            else:
-                counter += 1
-            self.strategy.update()
-
-            # if not self._jobs.empty():
-            #     job = self._jobs.get()
-            #     logger.info("Market_Watcher - __run - Job: " + str(job))
-            #     try:
-            #         job()
-            #     except Exception as e:
-            #         print(e)
-            #         logger.error(job.__name__ + " threw error:\n" + str(e))
+            if not self._jobs.empty():
+                job = self._jobs.get()
+                try:
+                    job()
+                except Exception as e:
+                    print(e)
+                    logger.error(job.__name__ + " threw error:\n" + str(e))
 
     def stop(self):
         """Stop listener queue"""
         self.__running = False
 
-    # def tick(self):
-    #     """Queue a pull of the latest candle"""
-    #     if self.historical_synced:
-    #         self._jobs.put(lambda: self.__pull_latest_candle(self.interval))
+    def tick(self):
+        """Queue a pull of the latest candle"""
+        if self.historical_synced:
+            self._jobs.put(lambda: self.__pull_latest_candle(self.interval))
 
     def sync_historical(self):
         """Queue loading of historical candles"""
-        #self._jobs.put(lambda: self.__sync_historical())
-        self.__sync_historical()
+        self._jobs.put(lambda: self.__sync_historical())
 
     def get_historical_candles(self):
         data = ohlcv_functions.get_all_candles(self.PairID)
@@ -94,7 +83,7 @@ class MarketWatcher:
                     logger.warning('Writing missing candle ' + str(entry[0]) + ' to database')
         self.historical_synced = True
         pub.sendMessage(self.topic + "historical")
-        logger.warning('Market data has been synced: ' + str(self.topic) + " + " + "historical")
+        logger.info('Market data has been synced.')
 
     def __pull_latest_candle(self, interval):
         """Initiate a pull of the latest candle, making sure not to pull a duplicate candle"""
@@ -114,7 +103,7 @@ class MarketWatcher:
             return
         self.latest_candle = latest_data
         pub.sendMessage(self.topic, candle=self.latest_candle)
-        logger.info("Sent message to " + self.topic)
+        print("Sent message to " + self.topic)
 
 
 lookup_list = defaultdict(MarketWatcher)
@@ -131,8 +120,8 @@ def get_market_watcher(exchange_id, base, quote, interval):
 def subscribe_historical(exchange_id, base, quote, interval, callable):
     """Subscribe to a notification that is sent when historical data is loaded for the market given"""
     topic = str(exchange_id + base + "/" + quote + interval + "historical")
-    # pub.subscribe(callable, topic)
-    callable()
+    pub.subscribe(callable, topic)
+
 
 def subscribe(exchange_id, base, quote, interval, callable):
     """
@@ -144,9 +133,8 @@ def subscribe(exchange_id, base, quote, interval, callable):
     :param callable: method to recieve new candle (must take candle as a param)
     :return: none
     """
-    # with lock:
-    topic = str(exchange_id + base + "/" + quote + interval)
-    get_market_watcher(exchange_id, base, quote, interval)
-    logger.warning("Subscribing to " + topic + " callable: " + str(callable) + " topic: " + str(topic))
-    callable()
-    # pub.subscribe(callable, topic)
+    with lock:
+        topic = str(exchange_id + base + "/" + quote + interval)
+        get_market_watcher(exchange_id, base, quote, interval)
+        print("Subscribing to " + topic)
+        pub.subscribe(callable, topic)

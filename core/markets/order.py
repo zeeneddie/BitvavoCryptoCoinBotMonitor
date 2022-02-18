@@ -27,10 +27,10 @@ class Order:
         if self.type == "limit":
             if self.side == "buy":
                 self.__order_receipt = self.market.exchange.create_limit_buy_order(self.market.analysis_pair, self.amount, self.price)
-                write_order_to_db(self.market.exchange.id, self.market.analysis_pair, 'long', self.amount, self.price, "live")
+                write_order_to_db(self.market.exchange.id, self.market.analysis_pair, 'buy', self.amount, self.price, "live")
             elif self.side == "sell":
                 self.__order_receipt = self.market.exchange.create_limit_sell_order(self.market.analysis_pair, self.amount, self.price)
-                write_order_to_db(self.market.exchange.id, self.market.analysis_pair, 'short', self.amount, self.price, "live")
+                write_order_to_db(self.market.exchange.id, self.market.analysis_pair, 'sell', self.amount, self.price, "live")
             else:
                 logger.error("Invalid order side: " + self.side + ", specify 'buy' or 'sell' ")
         elif self.type == "market":
