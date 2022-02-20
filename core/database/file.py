@@ -16,10 +16,22 @@ class File():
                 self.rows.append(row)
         return (self.rows)
 
-    def write(self, rows):
+    def write(self, coinlist):
+        coins = []
+        c = []
+        for coin in coinlist:
+            c.append(self.basecurrency)
+            c.append(self.quotecurrency)
+            c.append(self.positie)
+            c.append(self.amount)
+            c.append(self.current_price)
+            c.append(self.gain)
+            c.append(self.trail)
+            c.append(self.stoploss)
+            coins.append(c)
         filename = 'coin_info.csv'
         with open(filename, 'w') as file:
-            for row in rows:
+            for row in coins:
                 for x in row:
                     file.write(str(x) + ', ')
                 file.write('\n')

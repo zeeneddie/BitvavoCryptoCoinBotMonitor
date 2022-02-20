@@ -1,7 +1,5 @@
 from python_bitvavo_api.bitvavo import Bitvavo
 import os
-from tkinter import *
-
 
 class Bitvavo_client():
     def __init__(self):
