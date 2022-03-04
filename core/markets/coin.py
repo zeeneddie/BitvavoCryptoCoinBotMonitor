@@ -70,7 +70,6 @@ class Coin:
     def get_best_bid(self):
         best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         if 'error' in best.keys():
-            print(best)
             while 'error' in best.keys():
                 best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         return best['bids'][0][0]
@@ -78,7 +77,6 @@ class Coin:
     def get_best_ask(self):
         best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         if 'error' in best.keys():
-            print(best)
             while 'error' in best.keys():
                 best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         return best['asks'][0][0]
