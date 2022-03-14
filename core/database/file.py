@@ -18,22 +18,26 @@ class File():
 
     def write(self, coinlist):
         coins = []
-        c = []
         for coin in coinlist:
-            c.append(self.basecurrency)
-            c.append(self.quotecurrency)
-            c.append(self.positie)
-            c.append(self.amount)
-            c.append(self.current_price)
-            c.append(self.gain)
-            c.append(self.trail)
-            c.append(self.stoploss)
+            c = []
+            c.append(coin.base_currency)
+            c.append(coin.quote_currency)
+            if coin.position == True:
+                coin.position = 'Y'
+            else:
+                coin.position = 'N'
+            c.append(coin.position)
+            c.append(coin.amount)
+            c.append(coin.current_price)
+            c.append(coin.gain)
+            c.append(coin.trail)
+            c.append(coin.stoploss)
             coins.append(c)
         filename = 'coin_info.csv'
         with open(filename, 'w') as file:
             for row in coins:
-                for x in row:
-                    file.write(str(x) + ', ')
+                print(row[0])
+                file.write(str(row[0]) + ', ' + str(row[1]) + ',' + str(row[2]) + ',' + str(row[3]) + ',' + str(row[4]) + ',' + str(row[5]) + ',' + str(row[6]) + ',' + str(row[7]))
                 file.write('\n')
 
 

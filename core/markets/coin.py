@@ -105,7 +105,7 @@ class Coin:
                 if  self.high >= self.sell_drempel:
                     self.sell_signal = True
                     print(get_timestamp())
-                    print(f"SELL-SIGNAL: {self.analysis_pair}")
+                    print(f"SELL-SIGNAL: {self.analysis_pair}, {bid}, {self.high}")
             elif self.sell_signal:
                 if bid <=  self.trail_stop_sell_drempel:
                     result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)

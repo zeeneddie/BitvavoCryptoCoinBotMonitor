@@ -60,12 +60,6 @@ def start_monitoring(coin_list):
                     else:
                         print(
                             f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask}, \tLow: {coin.low} = {round((coin.ask / coin.current_price) * 100, 2)}")
-            elif (input_str == 'f'):
-                for coin in coin_list:
-                    if coin.position:
-                        print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, Bid: {coin.bid}, Amount: {coin.amount}, Gain: {coin.gain}, trail: sell-{coin.trail_stop_sell_drempel}")
-                    else:
-                        print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, Ask: {coin.ask}, Amount: {coin.amount}, Gain: {coin.gain}, trail: buy-{coin.trail_stop_buy_drempel}")
 
             elif (input_str == 'h'):
                 for coin in coin_list:
@@ -73,6 +67,8 @@ def start_monitoring(coin_list):
                         print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, High: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}")
                     else:
                         print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, Low: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}")
+            elif (input_str == 'f'):
+                file.write(coinlist)
 
         for coin in coin_list:
             time.sleep(0.1)
