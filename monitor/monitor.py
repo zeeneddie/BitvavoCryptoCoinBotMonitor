@@ -67,18 +67,28 @@ def start_monitoring(coin_list):
                         print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, High: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}")
                     else:
                         print(f"{coin.base_currency}, {coin.position}, Start: {coin.current_price}, Low: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}")
+            elif (input_str == 'n'):
+                for coin in coin_list:
+                    if not coin.position:
+                        print(
+                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask}, \tLow: {coin.low} = {round((coin.ask / coin.current_price) * 100, 2)}")
+            elif (input_str == 'p'):
+                for coin in coin_list:
+                    if coin.position:
+                        print(
+                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.bid}, \tHigh: {coin.high} = {round((coin.bid / coin.current_price) * 100, 2)}")
             elif (input_str == 'f'):
                 file.write(coinlist)
 
         for coin in coin_list:
-            time.sleep(0.1)
+            time.sleep(0.2)
             old_coin_position = coin.get_position()
             coin.check_action()
             new_coin_position = coin.get_position()
             if new_coin_position == old_coin_position:
                 pass
             else:
-                pass #self.file.write(self.coinlist)
+                file.write(coinlist)
 
 
 if __name__ == '__main__':

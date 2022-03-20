@@ -23,10 +23,10 @@ class File():
             c.append(coin.base_currency)
             c.append(coin.quote_currency)
             if coin.position == True:
-                coin.position = 'Y'
+                coin.pos_txt = 'Y'
             else:
-                coin.position = 'N'
-            c.append(coin.position)
+                coin.pos_txt = 'N'
+            c.append(coin.pos_txt)
             c.append(coin.amount)
             c.append(coin.current_price)
             c.append(coin.gain)
