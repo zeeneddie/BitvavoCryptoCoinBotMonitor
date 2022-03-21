@@ -71,6 +71,7 @@ class Coin:
         best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         if 'error' in best.keys():
             while 'error' in best.keys():
+                print(best['error'])
                 best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         return best['bids'][0][0]
 
@@ -78,6 +79,7 @@ class Coin:
         best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         if 'error' in best.keys():
             while 'error' in best.keys():
+                print(best['error'])
                 best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         return best['asks'][0][0]
 
@@ -98,6 +100,7 @@ class Coin:
             else:
                 bid = float(self.get_best_bid())
                 self.bid = bid
+                print(self.analysis_pair)
             if bid > self.high:
                 self.high = bid
                 self.sell_drempel = self.current_price * (1 + self.gain)
@@ -126,6 +129,7 @@ class Coin:
             else:
                 ask = float(self.get_best_ask())
                 self.ask = ask
+                print(self.analysis_pair)
             if ask < self.low:
                 self.low = ask
                 self.buy_drempel = self.current_price * (1 - self.gain)
