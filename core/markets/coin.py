@@ -94,12 +94,8 @@ class Coin:
 
     def check_action(self):
         if self.position:               # we are going to sell
-            if self.test:
-                bid = float(self.get_next_test())
-                self.bid = bid
-            else:
-                bid = float(self.get_best_bid())
-                self.bid = bid
+            bid = float(self.get_best_bid())
+            self.bid = bid
                 #print(self.analysis_pair)
             if bid > self.high:
                 self.high = bid
@@ -123,12 +119,8 @@ class Coin:
             if bid < self.stop_loss_buy:
                 pass
         else:                           # we are going to buy
-            if self.test:
-                ask = float(self.get_next_test())
-                self.ask = ask
-            else:
-                ask = float(self.get_best_ask())
-                self.ask = ask
+            ask = float(self.get_best_ask())
+            self.ask = ask
                 #print(self.analysis_pair)
             if ask < self.low:
                 self.low = ask
