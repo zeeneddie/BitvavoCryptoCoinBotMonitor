@@ -83,6 +83,14 @@ class Coin:
                 best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
         return best['asks'][0][0]
 
+    def get_best(self):
+        best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
+        if 'error' in best.keys():
+            while 'error' in best.keys():
+                print(best['error'])
+                best = self.bitvavo.book(self.analysis_pair, {'depth': '1'})
+        return best['asks'][0][0], best['bid'][0][0]
+
     def get_spread(self):
         ask = self.get_best_ask()
         bid = self.get_best_bid()
