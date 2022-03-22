@@ -100,7 +100,7 @@ class Coin:
             else:
                 bid = float(self.get_best_bid())
                 self.bid = bid
-                print(self.analysis_pair)
+                #print(self.analysis_pair)
             if bid > self.high:
                 self.high = bid
                 self.sell_drempel = self.current_price * (1 + self.gain)
@@ -129,7 +129,7 @@ class Coin:
             else:
                 ask = float(self.get_best_ask())
                 self.ask = ask
-                print(self.analysis_pair)
+                #print(self.analysis_pair)
             if ask < self.low:
                 self.low = ask
                 self.buy_drempel = self.current_price * (1 - self.gain)

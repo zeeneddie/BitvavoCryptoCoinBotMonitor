@@ -71,12 +71,12 @@ def start_monitoring(coin_list):
                 for coin in coin_list:
                     if not coin.position:
                         print(
-                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask}, \tLow: {coin.low} = {round((coin.ask / coin.current_price) * 100, 2)}")
+                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask}, \tLow: {coin.low} = {round((coin.ask / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
             elif (input_str == 'p'):
                 for coin in coin_list:
                     if coin.position:
                         print(
-                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.bid}, \tHigh: {coin.high} = {round((coin.bid / coin.current_price) * 100, 2)}")
+                            f"{coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.bid}, \tHigh: {coin.high} = {round((coin.bid / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
             elif (input_str == 'f'):
                 file.write(coinlist)
 
