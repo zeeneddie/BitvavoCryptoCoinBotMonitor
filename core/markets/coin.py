@@ -18,8 +18,9 @@ class Coin:
     This also handles the API key for authentication, as well as methods to place orders"""
 
     def __init__(self, bitvavo_client, coin_info):
-        self.base_currency = coin_info[0] #base_currency
-        self.quote_currency = coin_info[1] #quote_currency
+        self.index = coin_info[0]
+        self.base_currency = coin_info[1] #base_currency
+        self.quote_currency = coin_info[2] #quote_currency
         self.base_currency = self.base_currency.strip()
         self.quote_currency = self.quote_currency.strip()
         self.analysis_pair = '{}-{}'.format(self.base_currency, self.quote_currency)
@@ -30,15 +31,17 @@ class Coin:
         self.latest_candle = defaultdict(list)  # allows for order simulations based on historical ohlcv data
         self.low = 9999999.0
         self.high = 0.0
-        self.current_price = float(coin_info[4])
-        self.amount = float(coin_info[3])
+        self.current_price = float(coin_info[5])
+        self.amount = float(coin_info[4])
         self.var_sell = dict()
         self.var_buy = dict()
         self.var_sell['amountQuote'] = str(self.amount)
         self.var_buy['amountQuote'] = str(self.amount)
-        self.gain = float(coin_info[5])
-        self.trail = float(coin_info[6])
-        self.stoploss= float(coin_info[7])
+        self.gain = float(coin_info[6])
+        self.trail = float(coin_info[7])
+        self.stoploss= float(coin_info[8])
+        self.number_deals = int(coin_info[9])
+        self.last_update = str(coin_info[10])
         self.buy_drempel = 0.0
         self.sell_drempel = 0.0
         self.buy_signal = False
@@ -49,7 +52,7 @@ class Coin:
         self.trail_stop_sell_drempel = 0.0
         self.ask = 0
         self.bid = 0
-        coin_positie = coin_info[2].strip()
+        coin_positie = coin_info[3].strip()
         if coin_positie == 'Y':
             self.position = True
         else:
@@ -111,8 +114,8 @@ class Coin:
                 self.trail_stop_sell_drempel = self.high * (1 - self.trail)
                 if  self.high >= self.sell_drempel:
                     self.sell_signal = True
-                    #print(get_timestamp())
-                    #print(f"SELL-SIGNAL: {self.analysis_pair}, {bid}")
+                    print(get_timestamp())
+                    print(f"SELL-SIGNAL: {self.analysis_pair}, {bid}")
             elif self.sell_signal:
                 if bid <=  self.trail_stop_sell_drempel:
                     result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
@@ -122,6 +125,8 @@ class Coin:
                     self.position = False
                     self.current_price = bid
                     self.low = self.current_price
+                    self.last_update = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+                    self.number_deals = int(self.number_deals) + 1
 
             self.stop_loss_buy = self.current_price * (1 - self.stoploss)
             if bid < self.stop_loss_buy:
@@ -136,14 +141,17 @@ class Coin:
                 self.trail_stop_buy_drempel = self.low * (1 + self.trail)
                 if self.low < self.buy_drempel:
                     self.buy_signal = True
-                    #print(get_timestamp())
-                    #print(f"BUY-SIGNAL: {self.analysis_pair}, {ask}")
+                    print(get_timestamp())
+                    print(f"BUY-SIGNAL: {self.analysis_pair}, {ask}")
+                    print(f"Current: {self.current_price} Drempel: {self.buy_drempel}")
             elif self.buy_signal:
                 if self.trail_stop_buy_drempel <= ask:
                     self.buy_signal = False
                     self.position = True
                     self.current_price = ask
                     self.high = self. current_price
+                    self.last_update = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+                    self.number_deals = int(self.number_deals) + 1
                     r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     print(r)
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)

@@ -18,11 +18,14 @@ bitvavo = Bitvavo({
 
 response = bitvavo.balance({})
 for item in response:
-    print(f"{item['symbol']}  \t{item['available']}")
+    #print(f"{item['symbol']}  \t{item['available']}")
     if item['symbol'] != "EUR":
         tradepair = item['symbol']+"-EUR"
         response = bitvavo.trades(tradepair, {})
         for item in response:
-            print(item)
-            dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc)
-            print(f"{dt}, {item['market']}, {item['side']}, {item['amount']}, {item['price']}")
+
+            #print(item)
+            #dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc).strftime('%d-%m-%Y %H:%M:%S')
+            dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc).strftime('%m')
+
+            print(f"{dt}, {item['market']}, {item['side']}, {item['amount']}, {item['price']}, {item['fee']}")
