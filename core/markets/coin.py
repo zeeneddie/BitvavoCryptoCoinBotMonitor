@@ -125,7 +125,7 @@ class Coin:
                     self.position = False
                     self.current_price = bid
                     self.low = self.current_price
-                    self.last_update = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+                    self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
 
             self.stop_loss_buy = self.current_price * (1 - self.stoploss)
@@ -150,7 +150,7 @@ class Coin:
                     self.position = True
                     self.current_price = ask
                     self.high = self. current_price
-                    self.last_update = datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+                    self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
                     r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     print(r)

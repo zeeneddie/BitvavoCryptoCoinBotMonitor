@@ -42,7 +42,7 @@ class File():
             self.file_name)
         with open(self.file_fullpath, 'w') as file:
             for row in coins:
-                file.write(str(row[0]) + ', ' + str(row[1]) + ',' + str(row[2]) + ',' + str(row[3]) + ',' + str(row[4]) + ',' + str(row[5]) + ',' + str(row[6]) + ',' + str(row[7]))
+                file.write(str(row[0]) + ',' + str(row[1]) + ',' + str(row[2]) + ',' + str(row[3]) + ',' + str(row[4]) + ',' + str(row[5]) + ',' + str(row[6]) + ',' + str(row[7]) + ',' + str(row[8]) + ',' + str(row[9]) + ',' + str(row[10]))
                 file.write('\n')
 
 
