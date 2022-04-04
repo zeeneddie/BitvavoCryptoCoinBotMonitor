@@ -95,6 +95,7 @@ def start_monitoring(coin_list):
             elif (input_str == 'f'):
                 file.write(coinlist)
 
+
         for coin in coin_list:
             time.sleep(0.2)
             old_coin_position = coin.get_position()
