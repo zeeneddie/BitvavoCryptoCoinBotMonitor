@@ -1,0 +1,100 @@
+-
+  id: 1
+  q: De Python-taal is
+  a:
+    - correct: getypt
+    - niet getypt
+
+-
+  id: 2
+  q: Hoeveel bytes bevat de string "b\0\x00\t\n"?
+  a:
+    - '1'
+    - '4'
+    - correct: '5'
+    - '6'
+    - '11'
+
+-
+  id: 3
+  q: Welke van de volgende is juist?
+  a:
+    - Opmerkingen zijn geschreven voor programmeurs om het programma beter te begrijpen.
+    - Python-interpreter negeert commentaar
+    - Het is mogelijk om commentaar van meerdere regels in Python te schrijven met behulp van drievoudige aanhalingstekens, ''' of """
+    - correct: Alle bovenstaande
+
+-
+  id: 4
+  q: Wat is een variabele??
+  a:
+    - het is een geheugengebied dat groot genoeg is om een object weer te geven.
+    - correct: een vermelding in de systeemtabel die ruimte biedt voor het opslaan van verwijzingen naar objecten.
+    - is een dereferenced pointer naar een object
+
+-
+  id: 5
+  q: Kan een return-statement meerdere waarden retourneren in Python3?
+  a:
+    - correct: Ja
+    - Niet
+
+-
+  id: 6
+  q: Hoeveel geheugen is toegewezen voor gehele getallen in Python3?
+  a:
+    - 2 bytes
+    - 4 bytes
+    - 8 bytes
+    - 32 bytes
+    - correct: niet gelimiteerd
+
+-
+  id: 7
+  q: Python-nummers hebben type
+  a:
+    - mutable
+    - correct: immutable
+
+-
+  id: 8
+  q: Hoeveel objecten zijn er in totaal gemaakt met de volgende instructies?
+    >>> x = 0
+    >>> x = '0'
+    >>> x = 0.01
+    >>> x = 0
+  a:
+    - '1'
+    - '2'
+    - correct: '3'
+    - '4'
+
+-
+  id: 9
+  q: Informatie over het type letterlijke wordt opgeslagen
+  a:
+    - in een variabele
+    - correct: in object
+
+-
+  id: 10
+  q: Welke van de volgende functies converteert een tekenreeks naar een getal met drijvende komma?
+  a:
+    - int(x [,base])
+    - long(x [,base])
+    - correct: float(x)
+    - str(x)
+
+-
+  id: 11
+  q: Op welke datum begint het indexeren in Python?
+  a:
+    - correct: '0'
+    - '1'
+
+-
+  id: 12
+  q: In Python 3 is de maximaal mogelijke waarde van een geheel getal 2**63-1?
+  a:
+    - Ja
+    - correct: Nee
