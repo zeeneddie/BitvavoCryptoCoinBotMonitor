@@ -1,5 +1,8 @@
 import logging
 import os
+import csv
+from logging import debug, info
+
 
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
@@ -9,6 +12,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+AUTHORIZED_USERS = ['EddieZeen']
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -25,11 +29,29 @@ def help(update, context):
 
 def echo(update, context):
     """Echo the user message."""
-    message = update.message.text
-    if update.message.text == "file":
-        message = "FILE"
+    msg = update.message
+    user = msg.from_user
+    debug(f'Quiz bot entered by user: {user.id} @{user.username} "{user.first_name} {user.last_name}"')
 
-    update.message.reply_text (message) #(update.message.text)
+    if AUTHORIZED_USERS and user.username not in AUTHORIZED_USERS:
+        return
+
+    if update.message.text == "file":
+        file_name = 'coin_info.csv'
+        file_fullpath = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            file_name)
+        rows = []
+        with open(file_fullpath, 'r') as file:
+            csvreader = csv.reader(file)
+
+            for row in csvreader:
+                rows.append(row)
+        for i in rows:
+            message = i[0] + " " + i[1] + " " + i[3] + " " + i[4] + " " + i[5] + " " + str(round(float(i[6])*100,2)) + "% " + i[9] + " "+ i[10]
+            update.message.reply_text (message) #(update.message.text)
+    else:
+        update.message.reply_text (message)
 
 
 def error(update, context):
@@ -42,8 +64,10 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    TELEGRAM_TOKEN=os.getenv("TELEGRAM_TOKEN")
-    updater = Updater(TELEGRAM_TOKEN, use_context=True)
+    TOKEN=os.environ.get('TELEGRAMTOKEN')
+
+    print(TOKEN)
+    updater = Updater(TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
