@@ -35,9 +35,19 @@ def create_coin_list():
     return coinlist
 
 def print_overview(input_queue, coin_list):
+    mon_list = ['ADA', 'HOT', 'BTC', 'WIN', 'DENT', 'ZRX', 'XRP', 'ETH']
     if (input_queue.qsize() > 0):
         input_str = input_queue.get()
         coin_list.sort(key = lambda b: b.base_currency)
+        if input_str in mon_list:
+            for coin in coin_list:
+                if input_str == coin.base_currency:
+                    if coin.position:
+                        print(
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                    else:
+                        print(
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
         if (input_str == 'o'):
             for coin in coin_list:
                 if coin.position:
@@ -58,11 +68,13 @@ def print_overview(input_queue, coin_list):
         elif (input_str == 'h'):
             for coin in coin_list:
                 if coin.position:
-                    print(
-                        f"{coin.base_currency}, {coin.position}, start: {coin.current_price}, high: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}")
+                    if (round((coin.bid / coin.current_price)* 100, 2)) > 101:
+                        print(
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
                 else:
-                    print(
-                        f"{coin.base_currency}, {coin.position}, start: {coin.current_price}, low: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}")
+                    if (round((coin.ask / coin.current_price) * 100, 2)) < 98:
+                        print(
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
         elif (input_str == 'n'):
             for coin in coin_list:
                 if not coin.position:
