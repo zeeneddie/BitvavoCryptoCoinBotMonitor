@@ -2,7 +2,8 @@ import logging
 import os
 import time
 from core.database.file import File
-from core.markets.coin import Coin
+from coin_new import Coin
+from coinlist_new import Coinlist
 from bitvavo_client import Bitvavo_client
 import threading
 import queue
@@ -30,6 +31,7 @@ coinlist = []
 
 def create_coin_list():
     for coin in coins:
+        if
         c = Coin(bitvavo_client, coin)
         coinlist.append(c)
     return coinlist
@@ -65,7 +67,7 @@ def print_overview(input_queue, coin_list):
                         print(
                             f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
                 else:
-                    if (round((coin.ask / coin.current_price) * 100, 2)) < 100:
+                    if (round((coin.ask / coin.current_price) * 100, 2)) < 99:
                         print(
                             f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
         elif (input_str == 'n'):
@@ -105,8 +107,6 @@ def start_monitoring(coin_list):
     while True:
         print_overview(input_queue, coin_list)
 
-
-
         for coin in coin_list:
             time.sleep(0.2)
             old_coin_position = coin.get_position()
@@ -119,5 +119,5 @@ def start_monitoring(coin_list):
 
 
 if __name__ == '__main__':
-    coin_list = create_coin_list()
+    coin_list = Coinlist()
     start_monitoring(coin_list)

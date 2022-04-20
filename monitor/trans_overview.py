@@ -22,10 +22,17 @@ for item in response:
     if item['symbol'] != "EUR":
         tradepair = item['symbol']+"-EUR"
         response = bitvavo.trades(tradepair, {})
+        count = 1;
+        sum = 0;
         for item in response:
 
             #print(item)
             #dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc).strftime('%d-%m-%Y %H:%M:%S')
-            dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc).strftime('%m')
-
-            print(f"{dt}, {item['market']}, {item['side']}, {item['amount']}, {item['price']}, {item['fee']}")
+            dt = datetime.datetime.fromtimestamp(item['timestamp'] / 1000.0, tz=datetime.timezone.utc).strftime('%Y%m')
+            if (int(dt) > 202203):
+                sum = float(item['amount']) * float(item['price'])
+                if item['side'] == 'sell':
+                    sum = -1 * sum
+                #print(f"{count}, {dt}, {item['market']}, {item['side']}, {item['amount']}, {item['price']}, {item['fee']}")
+                count = count + 1
+        print(f"TOTAL voor {item['market']}: aantal {count} = som {sum}")
