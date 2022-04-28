@@ -4,38 +4,39 @@ import logging
 import os
 from collections import defaultdict
 
+import bitvavo_client
+
 logger = logging.getLogger(__name__)
 
 markets = []
 
 
-class Coin:
+class Coin_new:
 
-    def __init__(self, bitvavo_client, coin_info):
-        self.index = coin_info[0]
-        self.base_currency = coin_info[1] #base_currency
-        self.quote_currency = coin_info[2] #quote_currency
+    def __init__(self, coin_info):
+        self.base_currency = coin_info['Base'].strip()
         self.base_currency = self.base_currency.strip()
+        self.quote_currency = coin_info['Quote']
         self.quote_currency = self.quote_currency.strip()
         self.analysis_pair = '{}-{}'.format(self.base_currency, self.quote_currency)
         self.signals = []
-        self.bitvavo = bitvavo_client.bitvavo
+        self.bitvavo = bitvavo_client.Bitvavo
         self.indicators = defaultdict(list)
         self.candles = defaultdict(list)
         self.latest_candle = defaultdict(list)  # allows for order simulations based on historical ohlcv data
         self.low = 9999999.0
         self.high = 0.0
-        self.current_price = float(coin_info[5])
-        self.amount = float(coin_info[4])
+        self.current_price = float(coin_info['Base_price'])
+        self.amount = float(coin_info['Amount'])
         self.var_sell = dict()
         self.var_buy = dict()
         self.var_sell['amountQuote'] = str(self.amount)
         self.var_buy['amountQuote'] = str(self.amount)
-        self.gain = float(coin_info[6])
-        self.trail = float(coin_info[7])
-        self.stoploss= float(coin_info[8])
-        self.number_deals = int(coin_info[9])
-        self.last_update = str(coin_info[10])
+        self.gain = float(coin_info['Perc'])
+        self.trail = float(coin_info['Trail'])
+        self.stoploss= float(coin_info['Stop_loss'])
+        self.number_deals = int(coin_info['Count'])
+        self.last_update = str(coin_info['Last_update'])
         self.buy_drempel = 0.0
         self.sell_drempel = 0.0
         self.buy_signal = False
@@ -46,7 +47,7 @@ class Coin:
         self.trail_stop_sell_drempel = 0.0
         self.ask = 0
         self.bid = 0
-        coin_positie = coin_info[3].strip()
+        coin_positie = coin_info['Position'].strip()
         if coin_positie == 'Y':
             self.position = True
         else:

@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from core.database.file import File
-from coin_new import Coin
+from coin_new import Coin_new
 from coinlist_new import Coinlist
 from bitvavo_client import Bitvavo_client
 import threading
@@ -31,7 +31,6 @@ coinlist = []
 
 def create_coin_list():
     for coin in coins:
-        if
         c = Coin(bitvavo_client, coin)
         coinlist.append(c)
     return coinlist

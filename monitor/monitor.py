@@ -45,39 +45,31 @@ def print_overview(input_queue, coin_list):
                 if input_str == coin.base_currency:
                     if coin.position:
                         print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
                     else:
                         print(
-                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
-        if (input_str == 'c'):
-            for coin in coin_list:
-                if coin.position:
-                    print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}: {coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.bid}, \tHigh: {coin.high} = {round((coin.bid / coin.current_price) * 100, 2)}")
-                else:
-                    print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}: {coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask}, \tLow: {coin.low} = {round((coin.ask / coin.current_price) * 100, 2)}")
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tL: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
 
-        elif (input_str == 'h'):
+        if (input_str == 'h'):
             for coin in coin_list:
                 if coin.position:
                     if (round((coin.bid / coin.current_price)* 100, 2)) > 100:
                         print(
-                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
                 else:
                     if (round((coin.ask / coin.current_price) * 100, 2)) < 100:
                         print(
-                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
         elif (input_str == 'n'):
             for coin in coin_list:
                 if not coin.position:
                     print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tlow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tdrempel: {coin.gain}")
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tL: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
         elif (input_str == 'p'):
             for coin in coin_list:
                 if coin.position:
                     print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tstart: {coin.current_price}, \tcurrent: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \thigh: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
         elif (input_str == 't'):
             one_printed = False
             for coin in coin_list:
@@ -85,12 +77,12 @@ def print_overview(input_queue, coin_list):
                     if coin.buy_signal:
                         one_printed = True
                         print(
-                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price}, \tCurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tLow: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tL: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
                 if coin.position:
                     if coin.sell_signal:
                         one_printed = True
                         print(
-                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tStart: {coin.current_price} = {round((coin.bid / coin.current_price) * 100, 2)}, \tCurrent: {coin.bid}, \tLow: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tDrempel: {coin.gain}")
+                            f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price} = {round((coin.bid / coin.current_price) * 100, 2)}, \tC: {coin.bid}, \tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
             if not one_printed:
                 print("No TRIGGERS")
         elif (input_str == 'f'):
