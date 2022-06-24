@@ -11,6 +11,9 @@ logger = logging.getLogger(__name__)
 
 markets = []
 
+def time_ms() -> int:
+    return int(time.time() * 1000)
+
 
 class Coin:
     """An object that allows a specific strategy to interface with an exchange,
@@ -42,6 +45,7 @@ class Coin:
         self.stoploss= float(coin_info[8])
         self.number_deals = int(coin_info[9])
         self.last_update = str(coin_info[10])
+        self.sleep_till = int(coin_info[11])
         self.buy_drempel = 0.0
         self.sell_drempel = 0.0
         self.buy_signal = False
@@ -130,7 +134,15 @@ class Coin:
 
             self.stop_loss_buy = self.current_price * (1 - self.stoploss)
             if bid < self.stop_loss_buy:
-                pass
+                print("STOP LOSS: ", get_timestamp())
+                result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
+                self.position = False
+                self.current_price = self.current_price * 0.85
+                self.last_update = get_timestamp()
+                self.sleep_till = time_ms() + 86400000  # dag in millisecondenh
+
+                print(get_timestamp())
+                print(result)
         else:                           # we are going to buy
             ask = float(self.get_best_ask())
             self.ask = ask
@@ -152,11 +164,19 @@ class Coin:
                     self.high = self. current_price
                     self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
+
                     r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
+                    print(get_timestamp())
                     print(r)
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
             if ask > self.stop_loss_sell:
                 pass
+                #print("RESET Bottom Price / Current_price: ", get_timestamp())
+                #print(self.analysis_pair, " " , self.current_price, " ", ask, " ", self.stop_loss_sell)
+                #self.current_price = self.current_price + (self.current_price * (self.stoploss-0.02))
+                #print(self.analysis_pair , " " , self.current_price, " ", self.stoploss, " " , (self.stoploss - 0.02))
+                #self.position = False
+
 
 def get_timestamp():
     return datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
