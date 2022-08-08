@@ -134,15 +134,17 @@ class Coin:
 
             self.stop_loss_buy = self.current_price * (1 - self.stoploss)
             if bid < self.stop_loss_buy:
-                print("STOP LOSS: ", get_timestamp())
-                result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
-                self.position = False
-                self.current_price = self.current_price * 0.85
-                self.last_update = get_timestamp()
-                self.sleep_till = time_ms() + 86400000  # dag in millisecondenh
+                pass
+                #print("STOP LOSS: ", get_timestamp())
+                #print(self.analysis_pair, " bid", bid, " stop loss: ", self.stop_loss_buy);
+                #result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
+                #self.position = False
+                #self.current_price = self.current_price * 0.85
+                #self.last_update = get_timestamp()
+                #self.sleep_till = time_ms() + 86400000  # dag in millisecondenh
 
-                print(get_timestamp())
-                print(result)
+                #print(get_timestamp())
+                #print(result)
         else:                           # we are going to buy
             ask = float(self.get_best_ask())
             self.ask = ask
@@ -170,12 +172,12 @@ class Coin:
                     print(r)
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
             if ask > self.stop_loss_sell:
-                pass
                 #print("RESET Bottom Price / Current_price: ", get_timestamp())
                 #print(self.analysis_pair, " " , self.current_price, " ", ask, " ", self.stop_loss_sell)
-                #self.current_price = self.current_price + (self.current_price * (self.stoploss-0.02))
+                #self.current_price = self.current_price + (self.current_price * (self.stoploss-0.035))
                 #print(self.analysis_pair , " " , self.current_price, " ", self.stoploss, " " , (self.stoploss - 0.02))
                 #self.position = False
+                pass
 
 
 def get_timestamp():

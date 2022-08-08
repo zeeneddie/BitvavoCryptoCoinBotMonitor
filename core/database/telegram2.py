@@ -36,7 +36,7 @@ def echo(update, context):
     if AUTHORIZED_USERS and user.username not in AUTHORIZED_USERS:
         return
 
-    if update.message.text == "file":
+    if msg.text == "file":
         file_name = 'coin_info.csv'
         file_fullpath = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
@@ -50,8 +50,36 @@ def echo(update, context):
         for i in rows:
             message = i[0] + " " + i[1] + " " + i[3] + " " + i[4] + " " + i[5] + " " + str(round(float(i[6])*100,2)) + "% " + i[9] + " "+ i[10]
             update.message.reply_text (message) #(update.message.text)
+    elif msg.text[0] == "a":
+        s=msg.text[1:]
+        update.message.reply_text("thanks, I'll add ")
+        line = dict(item.split("=") for item in s.split(";"))
+        print(line)
+    elif msg.text[0] == "d":
+        update.message.reply_text("thanks, I'll delete ")
+    elif msg.text[0] == "u":
+        update.message.reply_text("thanks, I'll update ")
+        lineText = msg.txt[3:4]
+        line = int(msg.txt[3:4])
+        update.message.reply_text(lineText)
+        #file_name = 'coin_info.csv'
+        #file_fullpath = os.path.join(
+        #    os.path.dirname(os.path.realpath(__file__)),
+        #    file_name)
+        #rows = []
+        #with open(file_fullpath, 'r') as file:
+        #    csvreader = csv.reader(file)
+#
+#            for row in csvreader:
+#                rows.append(row)
+#        for i in rows:
+#            fileRegelNr = int(i[0])
+##            if fileRegelNr == line:
+#              message = i[0] + " " + i[1] + " " + i[3] + " " + i[4] + " " + i[5] + " " + str(round(float(i[6])*100,2)) + "% " + i[9] + " "+ i[10]
+#              update.message.reply_text (message) #(update.message.text)
+
     else:
-        update.message.reply_text (message)
+        update.message.reply_text (msg)
 
 
 def error(update, context):
