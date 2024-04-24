@@ -65,12 +65,12 @@ def print_overview(input_queue, coin_list):
             for coin in coin_list:
                 if not coin.position:
                     print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \tL: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tcurrent: {coin.ask} = {round((coin.ask / coin.current_price) * 100, 2)}, \ttemp_L: {coin.temp_low}\tL: {coin.low} = {round((coin.low / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
         elif (input_str == 'a'):
            for coin in coin_list:
                  if coin.position:
                      print(
-                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
+                        f"{coin.index}, {coin.last_update}, {coin.number_deals}, {coin.amount}: {coin.base_currency}, \t{coin.position}, \tS: {coin.current_price}, \tC: {coin.bid} = {round((coin.bid / coin.current_price) * 100, 2)}, \ttemp_H: {coin.temp_high}\tH: {coin.high} = {round((coin.high / coin.current_price) * 100, 2)}, \tD: {coin.gain}/{coin.trail}")
         elif (input_str == 'p'):
             for coin in coin_list:
                 if coin.position:
@@ -108,6 +108,8 @@ def start_monitoring(coin_list):
         for coin in coin_list:
             time.sleep(0.2)
             old_coin_position = coin.get_position()
+            old_temp_high = coin.high
+            old_temp_low = coin.low
             current_time = time_ms()
             if coin.sleep_till < current_time:
                 coin.check_action()
@@ -123,15 +125,19 @@ def start_monitoring(coin_list):
                 c = a - b
                 print(c)
 
-
-
-
             new_coin_position = coin.get_position()
             if new_coin_position == old_coin_position:
                 pass
             else:
                 file.write(coinlist)
-
+            new_coin_temp_high = coin.high
+            new_coin_temp_low = coin.low
+            if new_coin_position == False:
+                if new_coin_temp_low < old_temp_low:
+                  file.write(coinlist)
+            if new_coin_position == True:
+                if new_coin_temp_high > old_temp_high:
+                  file.write(coinlist)
 
 if __name__ == '__main__':
     coin_list = create_coin_list()

@@ -43,9 +43,13 @@ class Coin:
         self.gain = float(coin_info[6])
         self.trail = float(coin_info[7])
         self.stoploss= float(coin_info[8])
-        self.number_deals = int(coin_info[9])
-        self.last_update = str(coin_info[10])
-        self.sleep_till = int(coin_info[11])
+        self.temp_high = float(coin_info[9])
+        self.high = self.temp_high
+        self.temp_low = float(coin_info[10])
+        self.low = self.temp_low
+        self.number_deals = int(coin_info[11])
+        self.last_update = str(coin_info[12])
+        self.sleep_till = int(coin_info[13])
         self.buy_drempel = 0.0
         self.sell_drempel = 0.0
         self.buy_signal = False
@@ -59,8 +63,25 @@ class Coin:
         coin_positie = coin_info[3].strip()
         if coin_positie == 'Y':
             self.position = True
+            self.sell_drempel = self.current_price * (1 + self.gain)
+            if self.temp_high >= self.sell_drempel:
+                self.sell_signal = True
+                print(get_timestamp())
+                print(f"START SELL-SIGNAL: {self.analysis_pair}, {self.temp_high} >= {self.sell_drempel}")
+            else:
+                self.sell_signal = False
+                print(f"GEEN START SELL-SIGNAL: {self.analysis_pair}, {self.temp_high} < {self.sell_drempel}")
         else:
             self.position = False
+            self.buy_drempel = self.current_price * (1 - self.gain)
+            if self.temp_low < self.buy_drempel:
+                self.buy_signal = True
+                self.trail_stop_buy_drempel = self.low * (1 + self.trail)
+                print(get_timestamp())
+                print(f"BUY-SIGNAL: {self.analysis_pair}, tijdelijk: {self.temp_low} < {self.buy_drempel}")
+            else:
+                self.buy_signal = False
+                print(f"GEEN BUY-SIGNAL: {self.analysis_pair}, tijdelijk: {self.temp_low} >= {self.buy_drempel}")
         self.test = False
         self.testdata = self.current_price
 
@@ -107,6 +128,12 @@ class Coin:
     def get_position(self):
         return self.position
 
+    def get_temp_high(self):
+        return self.temp_high
+
+    def get_temp_low(self):
+        return self.temp_low
+
     def check_action(self):
         if self.position:               # we are going to sell
             bid = float(self.get_best_bid())
@@ -116,6 +143,7 @@ class Coin:
                 self.high = bid
                 self.sell_drempel = self.current_price * (1 + self.gain)
                 self.trail_stop_sell_drempel = self.high * (1 - self.trail)
+                self.temp_high = self.high
                 if  self.high >= self.sell_drempel:
                     self.sell_signal = True
                     print(get_timestamp())
@@ -129,6 +157,7 @@ class Coin:
                     self.position = False
                     self.current_price = bid
                     self.low = self.current_price
+                    self.temp_low = self.low
                     self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
 
@@ -152,9 +181,10 @@ class Coin:
             if ask < self.low:
                 self.low = ask
                 self.buy_drempel = self.current_price * (1 - self.gain)
-                self.trail_stop_buy_drempel = self.low * (1 + self.trail)
+                self.temp_low = self.low
                 if self.low < self.buy_drempel:
                     self.buy_signal = True
+                    self.trail_stop_buy_drempel = self.low * (1 + self.trail)
                     print(get_timestamp())
                     print(f"BUY-SIGNAL: {self.analysis_pair}, {ask}")
                     print(f"Current: {self.current_price} Drempel: {self.buy_drempel}")
@@ -164,6 +194,7 @@ class Coin:
                     self.position = True
                     self.current_price = ask
                     self.high = self. current_price
+                    self.temp_high = self.high
                     self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
 

@@ -36,6 +36,8 @@ class File():
             c.append(coin.gain)
             c.append(coin.trail)
             c.append(coin.stoploss)
+            c.append(coin.temp_high)
+            c.append(coin.temp_low)
             c.append(coin.number_deals)
             c.append(coin.last_update)
             c.append(coin.sleep_till)
@@ -46,7 +48,10 @@ class File():
             self.file_name)
         with open(self.file_fullpath, 'w') as file:
             for row in coins:
-                file.write(str(row[0]) + ',' + str(row[1]) + ',' + str(row[2]) + ',' + str(row[3]) + ',' + str(row[4]) + ',' + str(row[5]) + ',' + str(row[6]) + ',' + str(row[7]) + ',' + str(row[8]) + ',' + str(row[9]) + ',' + str(row[10] + ',' + str(row[11])))
+                file.write(str(row[0]) + ',' + str(row[1]) + ',' + str(row[2]) + ',' + str(row[3]) + ',' +
+                           str(row[4]) + ',' + str(row[5]) + ',' + str(row[6]) + ',' + str(row[7]) + ',' +
+                           str(row[8]) + ',' + str(row[9]) + ',' + str(row[10])+ ',' + str(row[11]) + ',' +
+                           str(row[12]) + ',' + str(row[13]))
                 file.write('\n')
 
 
