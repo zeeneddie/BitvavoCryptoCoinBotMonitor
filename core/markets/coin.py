@@ -155,7 +155,7 @@ class Coin:
                     print(result)
                     self.sell_signal = False
                     self.position = False
-                    self.current_price = bid
+                    #self.current_price = bid
                     self.low = self.current_price
                     self.temp_low = self.low
                     self.last_update = get_timestamp()
@@ -190,15 +190,15 @@ class Coin:
                     print(f"Current: {self.current_price} Drempel: {self.buy_drempel}")
             elif self.buy_signal:
                 if self.trail_stop_buy_drempel <= ask:
+                    r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     self.buy_signal = False
                     self.position = True
-                    self.current_price = ask
+                    #self.current_price = ask
                     self.high = self. current_price
                     self.temp_high = self.high
                     self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
 
-                    r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     print(get_timestamp())
                     print(r)
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
