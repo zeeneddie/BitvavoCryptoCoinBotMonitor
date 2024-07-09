@@ -107,7 +107,7 @@ def start_monitoring(coin_list):
         print_overview(input_queue, coin_list)
 
         for coin in coin_list:
-            time.sleep(0.2)
+            time.sleep(0.1)
             old_coin_position = coin.get_position()
             coin.check_action()
             new_coin_position = coin.get_position()
