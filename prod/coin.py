@@ -151,15 +151,20 @@ class Coin:
             elif self.sell_signal:
                 if bid <=  self.trail_stop_sell_drempel:
                     result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
-                    print(get_timestamp())
-                    print(result)
-                    self.sell_signal = False
-                    self.position = False
-                    #self.current_price = bid
-                    self.low = self.current_price
-                    self.temp_low = self.low
-                    self.last_update = get_timestamp()
-                    self.number_deals = int(self.number_deals) + 1
+                    if 'errorCode' in result.keys():
+                        print(get_timestamp())
+                        print(result)
+                        print("Next cycle new try")
+                    else:
+                        print(get_timestamp())
+                        print(result)
+                        self.sell_signal = False
+                        self.position = False
+                        #self.current_price = bid
+                        self.low = self.current_price
+                        self.temp_low = self.low
+                        self.last_update = get_timestamp()
+                        self.number_deals = int(self.number_deals) + 1
 
             self.stop_loss_buy = self.current_price * (1 - self.stoploss)
             if bid < self.stop_loss_buy:
@@ -191,17 +196,24 @@ class Coin:
             elif self.buy_signal:
                 if self.trail_stop_buy_drempel <= ask:
 
-                    r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
-                    self.buy_signal = False
-                    self.position = True
-                    #self.current_price = ask
-                    self.high = self. current_price
-                    self.temp_high = self.high
-                    self.last_update = get_timestamp()
-                    self.number_deals = int(self.number_deals) + 1
+                    result = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
 
-                    print(get_timestamp())
-                    print(r)
+                    if 'errorCode' in result.keys():
+                        print(get_timestamp())
+                        print(result)
+                        print("Next cycle new try")
+                    else:
+                        print(get_timestamp())
+                        print(result)
+                        self.buy_signal = False
+                        self.position = True
+                        #self.current_price = ask
+                        self.high = self. current_price
+                        self.temp_high = self.high
+                        self.last_update = get_timestamp()
+                        self.number_deals = int(self.number_deals) + 1
+
+
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
             if ask > self.stop_loss_sell:
                 #print("RESET Bottom Price / Current_price: ", get_timestamp())
