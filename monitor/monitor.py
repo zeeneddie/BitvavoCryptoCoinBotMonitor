@@ -119,7 +119,7 @@ def start_monitoring(coin_list):
                 sleep_dt = datetime.datetime.fromtimestamp(coin.sleep_till / 1000.0, tz=datetime.timezone.utc)
                 current_string = current_dt.strftime("%Y-%m-%d %H:%M:%S")
                 sleep_string = sleep_dt.strftime("%Y-%m-%d %H:%M:%S")
-                print(f"sleep = {sleep_string} and time = {current_string}")
+                print(f"coin = {coin.analysis_pair}, {coin.index}, sleep = {sleep_string} and time = {current_string}")
                 a = datetime.datetime.strptime(sleep_string, "%Y-%m-%d %H:%M:%S")
                 b = datetime.datetime.strptime(current_string, "%Y-%m-%d %H:%M:%S")
                 c = a - b

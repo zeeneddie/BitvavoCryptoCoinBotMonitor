@@ -211,6 +211,7 @@ class Coin:
                         self.high = self. current_price
                         self.temp_high = self.high
                         self.last_update = get_timestamp()
+                        self.amount = round((self.amount * 1.01), 2)
                         self.number_deals = int(self.number_deals) + 1
 
 
