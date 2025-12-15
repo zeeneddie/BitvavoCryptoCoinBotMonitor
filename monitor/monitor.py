@@ -112,7 +112,7 @@ def start_monitoring(coin_list):
             old_temp_low = coin.low
             current_time = time_ms()
             if coin.sleep_till < current_time:
-                coin.check_action()
+                coin.check_action(test=True)
             else:
                 # dd/mm/YY H:M:S
                 current_dt = datetime.datetime.fromtimestamp(current_time / 1000.0, tz=datetime.timezone.utc)

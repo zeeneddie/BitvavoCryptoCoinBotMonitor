@@ -22,5 +22,6 @@ if __name__ == "__main__":
         print('Bids', item)
     for item in response['asks']:
         print('Asks', item)
+
     result = bitvavo.bitvavo.placeOrder("BTC-EUR", 'sell', 'market', {'amountQuote':'2'})
     print(result)

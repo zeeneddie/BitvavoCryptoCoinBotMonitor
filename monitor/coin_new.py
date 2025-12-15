@@ -88,7 +88,7 @@ class Coin_new:
     def get_position(self):
         return self.position
 
-    def check_action(self):
+    def check_action(self, test=True):
         if self.position:               # we are going to sell
             bid = float(self.get_best_bid())
             self.bid = bid
@@ -103,7 +103,8 @@ class Coin_new:
                     print(f"SELL-SIGNAL: {self.analysis_pair}, {bid}")
             elif self.sell_signal:
                 if bid <=  self.trail_stop_sell_drempel:
-                    result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
+                    if test == False:
+                        result = self.bitvavo.placeOrder(self.analysis_pair, 'sell', 'market', self.var_sell)
                     print(get_timestamp())
                     print(result)
                     self.sell_signal = False
@@ -137,7 +138,8 @@ class Coin_new:
                     self.high = self. current_price
                     self.last_update = get_timestamp()
                     self.number_deals = int(self.number_deals) + 1
-                    r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
+                    if test == False:
+                        r = self.bitvavo.placeOrder(self.analysis_pair, 'buy', 'market', self.var_buy)
                     print(r)
             self.stop_loss_sell = self.current_price * (1 + self.stoploss)
             if ask > self.stop_loss_sell:

@@ -109,7 +109,7 @@ def start_monitoring(coin_list):
         for coin in coin_list:
             time.sleep(0.1)
             old_coin_position = coin.get_position()
-            coin.check_action()
+            coin.check_action(test=True)
             new_coin_position = coin.get_position()
             if new_coin_position == old_coin_position:
                 pass
